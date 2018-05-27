@@ -8,7 +8,8 @@
           {{ subject.subject }}
         </a-divider>
         <li v-for="hw in subject.homework" :style="{ listStyle: 'none' }">
-          <a-card v-bind="hw.name" :bordered="false" style="width: 300px">
+          <a-card :title="hw.name" :bordered="true
+          " style="width: 300px">
             <p>DUE #{{ hw.due }}</p>
             <p>{{ hw.description }}</p>
             <p>Card content</p>
