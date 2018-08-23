@@ -3,19 +3,22 @@
     <div :style="{ background: '#f0f2f5', padding: '24px', minHeight: '280px' }">
       <h1>{{ msg }}</h1>
       <a-divider orientation="left"># Today ## Homework</a-divider>
-      <div v-for="subject in upcomingItems">
+      <ul v-for="subject in upcomingItems">
         <a-divider orientation="left">
           {{ subject.subject }}
         </a-divider>
         <li v-for="hw in subject.homework" :style="{ listStyle: 'none' }">
           <a-card :title="hw.name" :bordered="true
-          " style="width: 300px">
+          " style="">
             <p>DUE #{{ hw.due }}</p>
             <p>{{ hw.description }}</p>
-            <p>Card content</p>
+            <a-card v-for="link in hw.links" :title="link.title" style="margin-top: 1em" :style="{ 'background-image': 'url(' + randomBackground() + ')' }">
+              <a :href="formatLink(link.type, link.uri)" slot="extra">Jump To ></a>
+              <h4>{{link.subtitle}}</h4>
+            </a-card>
           </a-card>
         </li>
-      </div>
+      </ul>
     </div>
   </a-layout-content>
 </template>
@@ -41,7 +44,7 @@ export default {
           }, {
             type: "qn-iblueg",
             title: "Crash Course - Mesopotamia",
-            uri: "[^http|projects]/video.mp4" // http://projects.qn.iblueg.cn/video.mp4
+            uri: "[^http|projects]/videos/video.mp4" // http://projects.qn.iblueg.cn/videos/video.mp4
           }, {
             type: "iblueg",
             title: "Speed Test",
@@ -55,6 +58,66 @@ export default {
          }]
         }]
       }]
+    }
+  },
+  methods: {
+    formatLink: function (type, link) {
+      let regex;
+      let urlInfo;
+      let m;
+      switch (type) {
+        case "schoology": {
+          return "https://app.schoology.com" + link;
+        }
+        case "qn-iblueg": {
+          regex = /^\[\^(http|https|ftp)\|([a-zA-Z-]+)](.*)/gm;
+          urlInfo = [];
+          while ((m = regex.exec(link)) !== null) {
+            if (m.index === regex.lastIndex) {
+              regex.lastIndex++;
+            }
+            m.forEach((match, groupIndex) => {
+              if (groupIndex !== 0) {
+                urlInfo.push(match)
+              }
+            });
+          }
+          if (urlInfo.length == 3) {
+            return urlInfo[0] + "://" + urlInfo[1] + ".qn.iblueg.cn" + urlInfo[2]
+          } else {
+            return false
+          }
+        }
+        case "iblueg": {
+          let regex2 = /^\[\^(http|https|ftp)\|([a-zA-Z-]+)](.*)$/gm;
+          let urlInfo2 = [];
+          let mm;
+          while ((mm = regex2.exec(link)) !== null) {
+            if (mm.index === regex2.lastIndex) {
+              regex2.lastIndex++;
+            }
+            mm.forEach((match, groupIndex) => {
+              if (groupIndex !== 0) {
+                urlInfo2.push(match)
+              }
+            });
+          }
+          if (urlInfo2.length == 3) {
+            return urlInfo2[0] + "://" + urlInfo2[1] + ".iblueg.cn" + urlInfo2[2]
+          } else {
+            return false
+          }
+        }
+        case "outbound": {
+          return "/link/" + link;
+        }
+        default:
+          return false
+      }
+    },
+    randomBackground: function() {
+      let randomize = Math.floor(Math.random() * 130).toString().padStart(3, '0');
+      return `http://image.qn.iblueg.cn/kuanpin${{randomize}}.jpg`
     }
   }
 }

@@ -21,24 +21,15 @@
     </a-layout>
   </div>
 </template>
-<script>
-export default {
-  data () {
-    return {
-      collapsed: false,
-    }
-  },
-}
-</script>
 
 <style>
-.custom-logo {
-  width: 140px;
-  height: 31px;
-  float: left;
-  color: rgba(255, 255, 255, 0.85);
-  font-family: 'Source Code Pro', 'Source Sans Pro', 'Courier New', 'Courier', monospace;
-}
+  .custom-logo {
+    width: 140px;
+    height: 31px;
+    float: left;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: 'Source Code Pro', 'Source Sans Pro', 'Courier New', 'Courier', monospace;
+  }
 </style>
 
 <script>
@@ -53,8 +44,6 @@ export default {
     FrameFooter
   }
 }
-
-
 
 </script>
 
